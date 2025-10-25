@@ -14,7 +14,7 @@
   "dependencies": {
     "@types/express": "^5.0.4",
     "express": "^5.1.0",
-    "better-sqlite3": "^9.0.0",
-    "@types/better-sqlite3": "^7.6.0"
+    
+    
   }
 }
