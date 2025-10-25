@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node server.js",
     "dev": "ts-node server.ts"
   },
   "devDependencies": {
