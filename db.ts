@@ -1,4 +1,4 @@
-import {Database} from 'bun:sqlite';
+import Database from 'better-sqlite3';
 
 const db = new Database('mydb.sqlite');
 db.exec(`
