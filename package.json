@@ -2,18 +2,18 @@
   "name": "leetlookup",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "start": "node server.js",
-    "dev": "ts-node server.ts"
+    "build": "echo 'No build needed for Bun'",
+    "start": "bun run server.ts",
+    "dev": "bun run server.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.0.0",
-    "typescript": "^5.0.0",
-    "ts-node": "^10.9.0"
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   },
   "dependencies": {
     "@types/express": "^5.0.4",
-    "express": "^5.1.0",
-    "better-sqlite3": "^9.0.0"
+    "express": "^5.1.0"
   }
 }
