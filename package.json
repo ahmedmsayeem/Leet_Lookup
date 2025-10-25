@@ -3,16 +3,18 @@
   "private": true,
   "scripts": {
     "build": "tsc",
-    "dev": "vercel dev"
+    "start": "node dist/server.js",
+    "dev": "ts-node server.ts"
   },
   "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
   },
   "dependencies": {
     "@types/express": "^5.0.4",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "better-sqlite3": "^9.0.0",
+    "@types/better-sqlite3": "^7.6.0"
   }
 }
