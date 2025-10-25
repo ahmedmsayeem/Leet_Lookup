@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leet Lookup</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f0f1a, #1c1c2e);
+            color: #f1f1f1;
+            font-family: "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #9b59b6;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #bdbdbd;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            background: #9b59b6;
+            border: none;
+            color: white;
+            padding: 0.7rem 1.4rem;
+            margin: 0.3rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #b37dd9;
+            box-shadow: 0 0 8px #b37dd9;
+        }
+
+        #problem-form-container {
+            background: #181826;
+            padding: 1.5rem;
+            border-radius: 12px;
+            max-width: 600px;
+            margin: 1rem auto;
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+            animation: fadeIn 0.4s ease;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            background: #1e1e2f;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 6px;
+            padding: 0.5rem;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        input[type="submit"] {
+            margin-top: 1.2rem;
+            width: 100%;
+            background: #9b59b6;
+            border: none;
+            color: white;
+            padding: 0.8rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: #b37dd9;
+            box-shadow: 0 0 8px #b37dd9;
+        }
+
+        #problem-list {
+            max-width: 700px;
+            margin: 2rem auto;
+            background: #181826;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+        }
+
+        h2 {
+            color: #a66dd8;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #202034;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid #2e2e4d;
+        }
+        /* layout for list items: header (title + badge) on a row, actions at right */
+        li .header { display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; }
+        li .left { display:flex; align-items:center; gap:0.6rem; flex:1; }
+
+        pre {
+            background: #151524;
+            color: #dcdcdc;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-top: 0.6rem;
+            overflow-x: auto;
+        }
+
+        /* Difficulty badge colors */
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: capitalize;
+        }
+
+        .easy {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .medium {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+            border: 1px solid #f39c12;
+        }
+
+        .hard {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        #toast {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+            animation: fadeInOut 3s ease;
+        }
+        #toast.error { background: #c0392b; box-shadow: 0 0 10px rgba(192,57,43,0.4); }
+        #toast.info { background: #2980b9; box-shadow: 0 0 10px rgba(41,128,185,0.4); }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+        /* Highlight (search) styling */
+        mark {
+            background: #ffd54f;
+            color: #111;
+            padding: 0.05rem 0.15rem;
+            border-radius: 3px;
+        }
+        /* Actions menu (three dots) */
+        .actions { display:inline-flex; align-items:center; margin-left:0.6rem; position:relative; }
+        .three-dots { background:none; border:none; color:#bbb; font-size:1.2rem; cursor:pointer; padding:0.15rem 0.3rem; }
+        .menu { position:absolute; right:0; top:110%; background:#1e1e2f; border:1px solid #444; padding:0.2rem; border-radius:6px; display:none; min-width:90px; z-index:10; box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+        .menu.show { display:block; }
+        .menu button { background:none; border:none; color:#fff; padding:0.4rem 0.6rem; text-align:left; width:100%; cursor:pointer; border-radius:4px; }
+        .menu button:hover { background:#2a2a3a; }
+    </style>
+    <!-- Highlight.js for syntax highlighting (Python) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+</head>
+
+<body>
+    <h1>Revise Here Gang</h1>
+    <p>Only if leetcode had a page to visit solved problems directly.</p>
+    <div style="text-align:center;">
+        <button onclick="showProblemForm()" id="showForm">Open Form</button>
+        <button onclick="hideProblemForm()" id="closeForm" style="display:none;">Close Form</button>
+    </div>
+
+    <div id="problem-form-container" style="display:none;">
+        <form id="problem-form">
+            <label for="title">Problem Title:</label>
+            <input type="text" id="title" name="title" required />
+
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty" name="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+
+            <label for="code">Code:</label>
+            <textarea id="code" name="code" rows="10" cols="50" required></textarea>
+
+            <input type="submit" value="Add Problem" />
+        </form>
+    </div>
+
+    <div id="problem-list">
+        <h2>Problems:</h2>
+        <div style="display:flex;gap:0.7rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;">
+            <input id="search" type="text" placeholder="Search & highlight..." style="flex:1;min-width:180px;padding:0.5rem;border-radius:6px;background:#1e1e2f;border:1px solid #444;color:#fff;" />
+            <select id="filter" style="padding:0.5rem;border-radius:6px;background:#1e1e2f;border:1px solid #444;color:#fff;">
+                <option value="all">All difficulties</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+            <button id="clearSearch" style="background:#444;padding:0.5rem 0.8rem;border-radius:6px;border:none;color:#fff;">Clear</button>
+        </div>
+
+        <ul id="problems-ul"></ul>
+    </div>
+
+    <div id="toast">Problem added successfully!</div>
+
+    <script>
+        // Escape user-provided text to safe HTML
+        function escapeHtml(unsafe) {
+            if (!unsafe && unsafe !== "") return "";
+            return String(unsafe)
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function fetchProblems() {
+            const filter = document.getElementById('filter').value;
+            const searchTerm = document.getElementById('search').value.trim();
+            const endpoint = (filter && filter !== 'all') ? `/problems/${filter}` : '/problems';
+
+            fetch(endpoint)
+                .then((response) => response.json())
+                .then((data) => {
+                    const problemsUl = document.getElementById("problems-ul");
+                    problemsUl.innerHTML = "";
+
+                    // If there's a search term, only keep items that match title or code
+                    let items = data;
+                    if (searchTerm) {
+                        const matchTerm = searchTerm.toLowerCase();
+                        items = data.filter(p => {
+                            const t = (p.title || '').toLowerCase();
+                            const c = (p.code || '').toLowerCase();
+                            return t.includes(matchTerm) || c.includes(matchTerm);
+                        });
+                    }
+
+                    items.forEach((problem) => {
+                        const li = document.createElement("li");
+
+                        // header row: left (title + badge) and right (actions)
+                        const header = document.createElement('div');
+                        header.className = 'header';
+
+                        const left = document.createElement('div');
+                        left.className = 'left';
+
+                        // Problem title
+                        const titleSpan = document.createElement("span");
+                        // Escape then optionally highlight
+                        let titleHtml = escapeHtml(problem.title || '');
+                        if (searchTerm) {
+                            const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                            titleHtml = titleHtml.replace(regex, (m) => `<mark>${m}</mark>`);
+                        }
+                        titleSpan.innerHTML = titleHtml;
+
+                        left.appendChild(titleSpan);
+
+                        // Actions area: badge on the right and the three-dot menu
+                        const actions = document.createElement('div');
+                        actions.className = 'actions';
+
+                        // Difficulty badge (moved to right)
+                        const difficultyBadge = document.createElement("span");
+                        difficultyBadge.textContent = problem.difficulty;
+                        difficultyBadge.classList.add("badge", (problem.difficulty || '').toLowerCase());
+
+                        const three = document.createElement('button');
+                        three.className = 'three-dots';
+                        three.textContent = '⋮';
+                        three.title = 'Actions';
+
+                        const menu = document.createElement('div');
+                        menu.className = 'menu';
+                        const delBtn = document.createElement('button');
+                        delBtn.textContent = 'Delete';
+                        delBtn.className = 'delete-btn';
+                        menu.appendChild(delBtn);
+
+                        actions.appendChild(difficultyBadge);
+                        actions.appendChild(three);
+                        actions.appendChild(menu);
+
+                        header.appendChild(left);
+                        header.appendChild(actions);
+                        li.appendChild(header);
+
+                        // toggle menu
+                        three.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            menu.classList.toggle('show');
+                        });
+
+                        // Problem code (syntax-highlighted as Python)
+                        const solution = document.createElement("pre");
+                        const codeEl = document.createElement("code");
+                        codeEl.className = 'language-python';
+                        let codeHtml = escapeHtml(problem.code || '');
+                        if (searchTerm) {
+                            const regex = new RegExp(searchTerm.replace(/[.*+?^${}()|[\\]\\]/g, '\\\\$&'), 'gi');
+                            codeHtml = codeHtml.replace(regex, (m) => `<mark>${m}</mark>`);
+                        }
+                        codeEl.innerHTML = codeHtml;
+                        solution.appendChild(codeEl);
+                        // run highlight on this code block if highlight.js loaded
+                        if (window.hljs && typeof hljs.highlightElement === 'function') {
+                            try { hljs.highlightElement(codeEl); } catch (e) { /* ignore */ }
+                        }
+                        li.appendChild(solution);
+
+                        // delete handler (no confirmation) — delete immediately on click
+                        delBtn.addEventListener('click', (ev) => {
+                            ev.stopPropagation();
+                            menu.classList.remove('show');
+                            fetch(`/problems/${problem.id}`, { method: 'DELETE' })
+                                .then(r => {
+                                    if (r.ok) {
+                                        showToast('Deleted successfully', 'success');
+                                        fetchProblems();
+                                    } else {
+                                        r.json().then(j => showToast('Delete failed: ' + (j.error || r.status), 'error')).catch(() => showToast('Delete failed', 'error'));
+                                    }
+                                })
+                                .catch(() => showToast('Delete request failed', 'error'));
+                        });
+
+                        problemsUl.appendChild(li);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching problems:", error);
+                });
+        }
+
+        // Wire up search/filter controls
+        document.getElementById('filter').addEventListener('change', () => fetchProblems());
+        document.getElementById('search').addEventListener('input', () => fetchProblems());
+        document.getElementById('clearSearch').addEventListener('click', () => { document.getElementById('search').value = ''; fetchProblems(); });
+
+        // Close any open action menus when clicking outside (single global handler)
+        document.addEventListener('click', () => { document.querySelectorAll('.menu.show').forEach(m => m.classList.remove('show')); });
+
+        // toast helper
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('error','info','success');
+            toast.classList.add(type === 'error' ? 'error' : (type === 'info' ? 'info' : 'success'));
+            toast.style.display = 'block';
+            clearTimeout(window._toastTimeout);
+            window._toastTimeout = setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        // initial load
+        fetchProblems();
+
+        const showProblemForm = () => {
+            document.getElementById("problem-form-container").style.display = "block";
+            document.getElementById("closeForm").style.display = "inline-block";
+            document.getElementById("showForm").style.display = "none";
+        };
+
+        const hideProblemForm = () => {
+            document.getElementById("problem-form-container").style.display = "none";
+            document.getElementById("closeForm").style.display = "none";
+            document.getElementById("showForm").style.display = "inline-block";
+        };
+
+        document.getElementById("problem-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const title = document.getElementById("title").value;
+            const difficulty = document.getElementById("difficulty").value;
+            const code = document.getElementById("code").value;
+
+            fetch("/problems", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, difficulty, code }),
+            })
+                .then((response) => response.json())
+                .then(() => {
+                    showToast('Problem added', 'success');
+                    fetchProblems();
+                })
+                .catch((error) => console.error("Error:", error));
+        });
+    </script>
+</body>
+
+</html>
