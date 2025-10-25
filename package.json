@@ -1,6 +1,10 @@
 {
   "name": "leetlookup",
   "private": true,
+  "scripts": {
+    "build": "tsc",
+    "dev": "vercel dev"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
